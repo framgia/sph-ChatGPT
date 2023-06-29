@@ -4,7 +4,6 @@ SIM ChatGPT: Unit Test is an internal simulation project of Sun\*. This is a vsc
 
 ## 🔗 Link
 
-https://marketplace.visualstudio.com/items?itemName=pj-sim-chatgpt-dev.sim-chatgpt-unit-test
 
 ## ⭐ Features
 
