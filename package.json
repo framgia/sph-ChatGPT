@@ -13,11 +13,57 @@
   "main": "./out/extension.js",
   "contributes": {
     "menus": {
+      "editor/context": [
+        {
+          "submenu": "myextensionfesubmenu",
+          "group": "navigation"
+        },
+        {
+          "submenu": "myextensionbesubmenu",
+          "group": "navigation"
+        }
+      ],
       "view/title": [
         {
           "command": "sim-chatgpt-translator.runApiKey",
           "group": "navigation",
           "when": "view == sim-chatgpt-translator-sidebar"
+        }
+      ],
+      "myextensionfesubmenu": [
+        {
+          "command": "sim-chatgpt-unit-test.runCypress",
+          "group": "navigation"
+        },
+        {
+          "command": "sim-chatgpt-unit-test.runStorybook",
+          "group": "navigation"
+        },
+        {
+          "command": "sim-chatgpt-unit-test.runPuppeteer",
+          "group": "navigation"
+        },
+        {
+          "command": "sim-chatgpt-unit-test.runPlaywright",
+          "group": "navigation"
+        }
+      ],
+      "myextensionbesubmenu": [
+        {
+          "command": "sim-chatgpt-unit-test.runCypress",
+          "group": "navigation"
+        },
+       {
+          "command": "sim-chatgpt-unit-test.runPHPUnit",
+          "group": "navigation"
+        },
+        {
+          "command": "sim-chatgpt-unit-test.runPyTest",
+          "group": "navigation"
+        },
+        {
+          "command": "sim-chatgpt-unit-test.runRSpec",
+          "group": "navigation"
         }
       ]
     },
@@ -41,13 +87,52 @@
         }
       ]
     },
+    "submenus": [
+      {
+        "label": "FE: Translate code to",
+        "id": "myextensionfesubmenu"
+      },
+      {
+        "label": "BE: Translate code to",
+        "id": "myextensionbesubmenu"
+      }
+    ],
     "commands": [
       {
         "command": "sim-chatgpt-translator.runApiKey",
         "title": "ChatGPT API Key",
         "icon": "media/icons/key.svg"
+      },
+      {
+        "command": "sim-chatgpt-unit-test.runCypress",
+        "title": "Cypress"
+      },
+      {
+        "command": "sim-chatgpt-unit-test.runPuppeteer",
+        "title": "Puppeteer"
+      },
+      {
+        "command": "sim-chatgpt-unit-test.runStorybook",
+        "title": "Storybook"
+      },
+      {
+        "command": "sim-chatgpt-unit-test.runPlaywright",
+        "title": "Playwright"
+      },
+      {
+        "command": "sim-chatgpt-unit-test.runPHPUnit",
+        "title": "PHPUnit   "
+      },
+      {
+        "command": "sim-chatgpt-unit-test.runPyTest",
+        "title": "PyTest"
+      },
+      {
+        "command": "sim-chatgpt-unit-test.runRSpec",
+        "title": "RSpec"
       }
     ]
+
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",
