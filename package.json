@@ -13,11 +13,57 @@
   "main": "./out/extension.js",
   "contributes": {
     "menus": {
+      "editor/context": [
+        {
+          "submenu": "myextensionfesubmenu",
+          "group": "navigation"
+        },
+        {
+          "submenu": "myextensionbesubmenu",
+          "group": "navigation"
+        }
+      ],
       "view/title": [
         {
           "command": "sim-chatgpt-translator.runApiKey",
           "group": "navigation",
           "when": "view == sim-chatgpt-translator-sidebar"
+        }
+      ],
+      "myextensionfesubmenu": [
+        {
+          "command": "sim-chatgpt-translator.runJavaScript",
+          "group": "navigation"
+        },
+        {
+          "command": "sim-chatgpt-translator.runTypeScript",
+          "group": "navigation"
+        },
+        {
+          "command": "sim-chatgpt-translator.runReact",
+          "group": "navigation"
+        },
+        {
+          "command": "sim-chatgpt-translator.runVue",
+          "group": "navigation"
+        }
+      ],
+      "myextensionbesubmenu": [
+        {
+          "command": "sim-chatgpt-translator.runPython",
+          "group": "navigation"
+        },
+       {
+          "command": "sim-chatgpt-translator.runPHP",
+          "group": "navigation"
+        },
+        {
+          "command": "sim-chatgpt-translator.runRuby",
+          "group": "navigation"
+        },
+        {
+          "command": "sim-chatgpt-translator.runC#",
+          "group": "navigation"
         }
       ]
     },
@@ -41,13 +87,56 @@
         }
       ]
     },
+    "submenus": [
+      {
+        "label": "FE: Translate code to",
+        "id": "myextensionfesubmenu"
+      },
+      {
+        "label": "BE: Translate code to",
+        "id": "myextensionbesubmenu"
+      }
+    ],
     "commands": [
       {
         "command": "sim-chatgpt-translator.runApiKey",
         "title": "ChatGPT API Key",
         "icon": "media/icons/key.svg"
+      },
+      {
+        "command": "sim-chatgpt-translator.runReact",
+        "title": "React"
+      },
+      {
+        "command": "sim-chatgpt-translator.runJavaScript",
+        "title": "Javascript"
+      },
+      {
+        "command": "sim-chatgpt-translator.runTypeScript",
+        "title": "TypeScript"
+      },
+      {
+        "command": "sim-chatgpt-translator.runVue",
+        "title": "Vue"
+      },
+      {
+        "command": "sim-chatgpt-translator.runPython",
+        "title": "Python"
+      },
+      {
+        "command": "sim-chatgpt-translator.runPHP",
+        "title": "Php"
+      },
+      {
+        "command": "sim-chatgpt-translator.runRuby",
+        "title": "Ruby"
+      },
+      {
+        "command": "sim-chatgpt-translator.runC#",
+        "title": "C#"
       }
     ]
+
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",
