@@ -32,37 +32,37 @@
       ],
       "myextensionfesubmenu": [
         {
-          "command": "sim-chatgpt-unit-test.runCypress",
+          "command": "sim-chatgpt-translator.runJavaScript",
           "group": "navigation"
         },
         {
-          "command": "sim-chatgpt-unit-test.runStorybook",
+          "command": "sim-chatgpt-translator.runTypeScript",
           "group": "navigation"
         },
         {
-          "command": "sim-chatgpt-unit-test.runPuppeteer",
+          "command": "sim-chatgpt-translator.runReact",
           "group": "navigation"
         },
         {
-          "command": "sim-chatgpt-unit-test.runPlaywright",
+          "command": "sim-chatgpt-translator.runVue",
           "group": "navigation"
         }
       ],
       "myextensionbesubmenu": [
         {
-          "command": "sim-chatgpt-unit-test.runCypress",
+          "command": "sim-chatgpt-translator.runPython",
           "group": "navigation"
         },
        {
-          "command": "sim-chatgpt-unit-test.runPHPUnit",
+          "command": "sim-chatgpt-translator.runPHP",
           "group": "navigation"
         },
         {
-          "command": "sim-chatgpt-unit-test.runPyTest",
+          "command": "sim-chatgpt-translator.runRuby",
           "group": "navigation"
         },
         {
-          "command": "sim-chatgpt-unit-test.runRSpec",
+          "command": "sim-chatgpt-translator.runC#",
           "group": "navigation"
         }
       ]
@@ -104,32 +104,36 @@
         "icon": "media/icons/key.svg"
       },
       {
-        "command": "sim-chatgpt-unit-test.runCypress",
-        "title": "Cypress"
+        "command": "sim-chatgpt-translator.runReact",
+        "title": "React"
       },
       {
-        "command": "sim-chatgpt-unit-test.runPuppeteer",
-        "title": "Puppeteer"
+        "command": "sim-chatgpt-translator.runJavaScript",
+        "title": "Javascript"
       },
       {
-        "command": "sim-chatgpt-unit-test.runStorybook",
-        "title": "Storybook"
+        "command": "sim-chatgpt-translator.runTypeScript",
+        "title": "TypeScript"
       },
       {
-        "command": "sim-chatgpt-unit-test.runPlaywright",
-        "title": "Playwright"
+        "command": "sim-chatgpt-translator.runVue",
+        "title": "Vue"
       },
       {
-        "command": "sim-chatgpt-unit-test.runPHPUnit",
-        "title": "PHPUnit   "
+        "command": "sim-chatgpt-translator.runPython",
+        "title": "Python"
       },
       {
-        "command": "sim-chatgpt-unit-test.runPyTest",
-        "title": "PyTest"
+        "command": "sim-chatgpt-translator.runPHP",
+        "title": "Php"
       },
       {
-        "command": "sim-chatgpt-unit-test.runRSpec",
-        "title": "RSpec"
+        "command": "sim-chatgpt-translator.runRuby",
+        "title": "Ruby"
+      },
+      {
+        "command": "sim-chatgpt-translator.runC#",
+        "title": "C#"
       }
     ]
 
