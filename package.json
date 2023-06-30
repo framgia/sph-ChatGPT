@@ -1,7 +1,7 @@
 {
-  "name": "sim-chatgpt-test-framework",
-  "displayName": "sim-chatgpt-test-framework",
-  "description": "Create a test file with commonly used test unit frameworks for BE/FE side",
+  "name": "sim-chatgpt-translator",
+  "displayName": "SIM ChatGPT: Translator",
+  "description": "Translate any programming languages based on the selected language provided",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.79.0"
@@ -12,10 +12,40 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "menus": {
+      "view/title": [
+        {
+          "command": "sim-chatgpt-translator.runApiKey",
+          "group": "navigation",
+          "when": "view == sim-chatgpt-translator-sidebar"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "sim-chatgpt-translator-sidebar",
+          "title": "SIM ChatGPT",
+          "icon": "media/icons/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "sim-chatgpt-translator-sidebar": [
+        {
+          "type": "webview",
+          "id": "sim-chatgpt-translator-sidebar",
+          "name": "Translator",
+          "icon": "media/icons/icon.svg",
+          "contextualTitle": "Sidebar"
+        }
+      ]
+    },
     "commands": [
       {
-        "command": "sim-chatgpt-test-framework.helloWorld",
-        "title": "Hello World"
+        "command": "sim-chatgpt-translator.runApiKey",
+        "title": "ChatGPT API Key",
+        "icon": "media/icons/key.svg"
       }
     ]
   },
