@@ -2,8 +2,11 @@ import * as vscode from 'vscode';
 export class SidebarProvider implements vscode.WebviewViewProvider {
   _view?: vscode.WebviewView;
   _doc?: vscode.TextDocument;
+  _extensionUri: vscode.Uri;
 
-  constructor(private readonly _extensionUri: vscode.Uri) {}
+  constructor(private _context: vscode.ExtensionContext) {
+    this._extensionUri = _context.extensionUri;
+  }
 
   public resolveWebviewView(webviewView: vscode.WebviewView) {
     this._view = webviewView;
@@ -15,6 +18,24 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     };
 
     webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+
+    webviewView.webview.onDidReceiveMessage(async (data) => {
+      switch (data.type) {
+        case 'saveApiKey': {
+          this._context.secrets.store('translationApiKey', data.value);
+          break;
+        }
+        case 'getApiKey': {
+          this._context.secrets.get('translationApiKey').then((key) => {
+            this._view?.webview.postMessage({
+              type: 'onLoadApiKey',
+              value: key,
+            });
+          });
+          break;
+        }
+      }
+    });
   }
 
   public revive(panel: vscode.WebviewView) {
@@ -31,6 +52,9 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     const styleVSCodeUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, 'media/css', 'vscode.css')
     );
+    const jsVSCodeUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, 'media/js', 'main.js')
+    );
     const userUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, 'media/icons', 'user.svg')
     );
@@ -45,12 +69,18 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 			<html lang="en">
 			<head>
 				<meta charset="UTF-8">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src 'self'; font-src 'self'; img-src 'self' data: 'data:image/svg+xml' https:; style-src ${webview.cspSource};  script-src 'nonce-${nonce}';">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src 'self'; font-src 'self'; img-src 'self' data: 'data:image/svg+xml' https:; style-src ${webview.cspSource};   script-src ${webview.cspSource};">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 				<link href="${styleResetUri}" rel="stylesheet">
 				<link href="${styleVSCodeUri}" rel="stylesheet">
 			</head>
       <body>
+      <form class="flex" id="myForm">
+        <input type="text" id="api-key" class="api-input code" placeholder="ChatGPT API Key"></input>
+        <button class="btn-save" type="submit">Save</button>
+      </form>
+      <code id="message">Please enter your ChatGPT API Key. Make sure you have enough credits to use ChatGPT API. Your API key will be stored in vscode secret storage.</code>
+      <hr id="divider"/>
       <div class="flex mb-5">
         <textarea id="input-query" readonly placeholder="Highlight code snippet to ask GPT..." class="w-full resize-vertical rounded-md p-2"></textarea>
         <div class="user space-y-2">
@@ -66,6 +96,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           <textarea id="response-container" readonly class="w-full p-2" placeholder="Hello! Do you have any programming language you would like me to translate?"></textarea>
         </div>
       </div>
+      <script  nonce="${nonce}" src="${jsVSCodeUri}"></script>
 	    </body>
 	</html>`;
   }
