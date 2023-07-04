@@ -30,6 +30,13 @@
         }
         break;
       }
+      case 'onSelectedText': {
+        const textarea = document.getElementById('input-query');
+        textarea.value = message.value;
+        textarea.style.height = '';
+        textarea.style.height = Math.min(textarea.scrollHeight, 500) + 'px';
+        break;
+      }
     }
   });
 
@@ -58,4 +65,11 @@
     }
     document.getElementById('myForm').reset();
   }
+
+  const clearInput = document.getElementById('clear-input');
+  clearInput.onclick = () => {
+    const textarea = document.getElementById('input-query');
+    textarea.value = '';
+    textarea.style.height = '';
+  };
 })();
