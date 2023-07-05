@@ -191,3 +191,14 @@ hr {
   min-height: 60px;
   overflow: hidden;
 }
+
+#gear-container {
+  width: 100%;
+}
+
+#gear {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
