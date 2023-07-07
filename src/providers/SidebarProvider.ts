@@ -135,10 +135,11 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         </div>
       </div>
       <div id="gear-container" class="hidden">
-        <div id="gear">
+        <form id="gear">
           <img width="50" height="50" src="${gearUri}">
           <p>Composing...</p>
-        </div>
+          <button type="submit" class="button btn-cancel">Cancel</button>
+        </form>
       </div>
       <script  nonce="${nonce}" src="${jsVSCodeUri}"></script>
 	    </body>

@@ -201,4 +201,10 @@ hr {
   width: 100%;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+}
+
+.btn-cancel {
+  width: 60%;
+  border-radius: 5px;
 }
