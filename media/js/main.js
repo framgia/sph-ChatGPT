@@ -106,9 +106,7 @@
 
   function handleCancelRequest(event) {
     event.preventDefault();
-    let searchOutput = document.getElementById('search-output');
     let loading = document.getElementById('gear-container');
-    searchOutput.classList.remove('hidden');
     loading.classList.add('hidden');
   }
 })();
