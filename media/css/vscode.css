@@ -196,7 +196,7 @@ hr {
   width: 100%;
 }
 
-#gear {
+.flex-gear {
   display: flex;
   width: 100%;
   align-items: center;

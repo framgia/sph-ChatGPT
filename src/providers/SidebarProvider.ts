@@ -6,6 +6,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
   _doc?: vscode.TextDocument;
   _openAI?: openai.OpenAIApi;
   _extensionUri: vscode.Uri;
+  _isCancelled: boolean = false;
 
   constructor(private _context: vscode.ExtensionContext) {
     this._extensionUri = _context.extensionUri;
@@ -49,6 +50,14 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           });
           break;
         }
+        case 'cancelQuery': {
+          this._isCancelled = true;
+          this._view?.webview.postMessage({
+            type: 'onChatGPTResponse',
+            value: '',
+          });
+          break;
+        }
         case 'queryChatGPT': {
           this._openAI
             ?.createChatCompletion({
@@ -56,16 +65,26 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
               messages: [{ role: 'user', content: data.value }],
             })
             .then((res) => {
-              this._view?.webview.postMessage({
-                type: 'onChatGPTResponse',
-                value: res.data.choices[0].message?.content,
-              });
+              if (!this._isCancelled) {
+                this._view?.webview.postMessage({
+                  type: 'onChatGPTResponse',
+                  value: res.data.choices[0].message?.content,
+                });
+              }
+              this._isCancelled = false;
             })
             .catch((error) => {
-              vscode.window.showErrorMessage(
-                'SIM ChatGPT: ' + error.response.data.error.message ||
-                  error.message
-              );
+              if (!this._isCancelled) {
+                this._view?.webview.postMessage({
+                  type: 'onChatGPTResponse',
+                  value: error.response.data.error.message,
+                });
+                vscode.window.showErrorMessage(
+                  'SIM ChatGPT: ' + error.response.data.error.message ||
+                    error.message
+                );
+              }
+              this._isCancelled = false;
             });
           break;
         }
@@ -135,11 +154,11 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         </div>
       </div>
       <div id="gear-container" class="hidden">
-        <form id="gear">
-          <img width="50" height="50" src="${gearUri}">
-          <p>Composing...</p>
-          <button type="submit" class="button btn-cancel">Cancel</button>
-        </form>
+        <div class="flex-gear">
+            <img width="50" height="50" src="${gearUri}">
+            <p>Composing...</p>
+            <button id="cancel-request" class="button btn-cancel">Cancel</button>
+        </div>
       </div>
       <script  nonce="${nonce}" src="${jsVSCodeUri}"></script>
 	    </body>

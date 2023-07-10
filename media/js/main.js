@@ -5,9 +5,6 @@
 (function () {
   const vscode = acquireVsCodeApi();
   document.getElementById('myForm').addEventListener('submit', handleSubmit);
-  document
-    .getElementById('gear')
-    .addEventListener('submit', handleCancelRequest);
   window.addEventListener(
     'load',
     () => {
@@ -103,10 +100,8 @@
       loading.classList.add('hidden');
     }
   }
-
-  function handleCancelRequest(event) {
-    event.preventDefault();
-    let loading = document.getElementById('gear-container');
-    loading.classList.add('hidden');
-  }
+  const cancelLoading = document.getElementById('cancel-request');
+  cancelLoading.onclick = () => {
+    vscode.postMessage({ type: 'cancelQuery', value: null });
+  };
 })();
