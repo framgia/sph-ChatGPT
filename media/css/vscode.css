@@ -91,8 +91,11 @@ input:not([type='checkbox']),
 
 .card {
   border-radius: 8px;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: auto;
+  border-radius: 5px;
   width: 100%;
   border: none;
   resize: none;
@@ -192,8 +195,25 @@ hr {
   overflow: hidden;
 }
 
-#gear-container {
-  width: 100%;
+#search-output {
+  display: flex;
+}
+
+#search-output-icons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#cancel-request {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+#search-output-icons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #gear {

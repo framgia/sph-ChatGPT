@@ -6,6 +6,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
   _doc?: vscode.TextDocument;
   _openAI?: openai.OpenAIApi;
   _extensionUri: vscode.Uri;
+  _isCancelled: boolean = false;
 
   constructor(private _context: vscode.ExtensionContext) {
     this._extensionUri = _context.extensionUri;
@@ -49,6 +50,14 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           });
           break;
         }
+        case 'cancelQuery': {
+          this._isCancelled = true;
+          this._view?.webview.postMessage({
+            type: 'onChatGPTResponse',
+            value: '',
+          });
+          break;
+        }
         case 'queryChatGPT': {
           this._openAI
             ?.createChatCompletion({
@@ -56,16 +65,26 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
               messages: [{ role: 'user', content: data.value }],
             })
             .then((res) => {
-              this._view?.webview.postMessage({
-                type: 'onChatGPTResponse',
-                value: res.data.choices[0].message?.content,
-              });
+              if (!this._isCancelled) {
+                this._view?.webview.postMessage({
+                  type: 'onChatGPTResponse',
+                  value: res.data.choices[0].message?.content,
+                });
+              }
+              this._isCancelled = false;
             })
             .catch((error) => {
-              vscode.window.showErrorMessage(
-                'SIM ChatGPT: ' + error.response.data.error.message ||
-                  error.message
-              );
+              if (!this._isCancelled) {
+                this._view?.webview.postMessage({
+                  type: 'onChatGPTResponse',
+                  value: error.response.data.error.message,
+                });
+                vscode.window.showErrorMessage(
+                  'SIM ChatGPT: ' + error.response.data.error.message ||
+                    error.message
+                );
+              }
+              this._isCancelled = false;
             });
           break;
         }
@@ -81,8 +100,11 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     const logoUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, 'media/icons', 'icon.svg')
     );
-    const gearUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, 'media/icons', 'gear.svg')
+    const cancelUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, 'media/icons', 'cancel.svg')
+    );
+    const loadingUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, 'media/icons', 'loading.svg')
     );
     const styleResetUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, 'media/css', 'reset.css')
@@ -104,7 +126,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     const nonce = getNonce();
 
     return `<!DOCTYPE html>
-			<html lang="en">
+		<html lang="en">
 			<head>
 				<meta charset="UTF-8">
         <meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src 'self'; font-src 'self'; img-src 'self' data: 'data:image/svg+xml' https:; style-src ${webview.cspSource};   script-src ${webview.cspSource};">
@@ -127,18 +149,22 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         </div>
       </div>
       <div class="flex" id="search-output">
+        <div id="search-output-icons">
         <div class="logo">
           <img src="${logoUri}">
         </div>
-        <div class="card" readonly">
-          <textarea id="response-container" readonly class="w-full p-2" placeholder="Hello! Do you have any programming language you would like me to translate?"></textarea>
+        <div id="cancel-request" class="hidden">
+          <img src="${cancelUri}">
         </div>
       </div>
-      <div id="gear-container" class="hidden">
-        <div id="gear">
-          <img width="50" height="50" src="${gearUri}">
-          <p>Composing...</p>
-        </div>
+        <div class="card" readonly">
+          <textarea id="response-container" readonly class="w-full p-2" placeholder="Hello! Do you have any programming language you would like me to translate?"></textarea>
+          <div id="gear-container" class="hidden">
+          <div id="gear">
+            <img width="20" height="20" src="${loadingUri}">
+          </div>
+          </div>
+      </div>
       </div>
       <script  nonce="${nonce}" src="${jsVSCodeUri}"></script>
 	    </body>
