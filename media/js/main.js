@@ -90,14 +90,17 @@
     textarea.style.height = '';
   };
   function handleLoading(isLoading) {
-    let searchOutput = document.getElementById('search-output');
+    let searchOutput = document.getElementById('response-container');
     let loading = document.getElementById('gear-container');
+    let cancel = document.getElementById('cancel-request');
     if (isLoading) {
       searchOutput.classList.add('hidden');
       loading.classList.remove('hidden');
+      cancel.classList.remove('hidden');
     } else {
       searchOutput.classList.remove('hidden');
       loading.classList.add('hidden');
+      cancel.classList.add('hidden');
     }
   }
   const cancelLoading = document.getElementById('cancel-request');
