@@ -39,6 +39,22 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
               apiKey: data.value,
             })
           );
+          this._openAI
+            ?.createChatCompletion({
+              model: 'gpt-3.5-turbo',
+              messages: [{ role: 'user', content: data.value }],
+            })
+            .then((res) => {
+              vscode.window.showInformationMessage(
+                'SIM ChatGPT successfully added API key: ' + res.status
+              );
+            })
+            .catch((error) => {
+              vscode.window.showErrorMessage(
+                'SIM ChatGPT: ' + error.response.data.error.message ||
+                  error.message
+              );
+            });
           break;
         }
         case 'getApiKey': {
