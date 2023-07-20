@@ -219,9 +219,14 @@ hr {
 
 #gear {
   display: flex;
-  width: 8%;
+  width: 100%;
   align-items: center;
   justify-content: center;
+}
+
+#gear > svg {
+  width: 10%;
+  height: 10%;
 }
 
 .user > svg {
@@ -236,11 +241,6 @@ hr {
 
 #clear-input {
   cursor: pointer;
-}
-
-#gear > svg {
-  width: 100%;
-  height: 100%;
 }
 
 .logo > svg {

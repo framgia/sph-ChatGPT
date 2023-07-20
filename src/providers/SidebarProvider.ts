@@ -148,46 +148,60 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         <link href="${styleVSCodeUri}" rel="stylesheet" />
       </head>
       <body>
-      <form class="flex" id="myForm">
-        <input type="text" id="api-key" class="api-input code" placeholder="ChatGPT API Key"></input>
-        <button class="btn-save" type="submit">Save</button>
-      </form>
-      <code id="message">Please enter your ChatGPT API Key. Make sure you have enough credits to use ChatGPT API. Your API key will be stored in vscode secret storage.</code>
-      <hr id="divider"/>
-      <div class="flex mb-5">
-        <textarea id="input-query" readonly placeholder="Highlight code snippet to ask GPT..." class="w-full resize-vertical rounded-md p-2"></textarea>
-        <div class="user space-y-2">
-          <img src="${userUri}">
-          <img class="trash" id="clear-input" src="${trashUri}">
+        <form class="flex" id="myForm">
+          <input
+            type="text"
+            id="api-key"
+            class="api-input code"
+            placeholder="ChatGPT API Key"
+          />
+          <button class="btn-save" type="submit">Save</button>
+        </form>
+        <code id="message"
+          >Please enter your ChatGPT API Key. Make sure you have enough credits to
+          use ChatGPT API. Your API key will be stored in vscode secret
+          storage.</code
+        >
+        <hr id="divider" />
+        <div class="flex mb-5">
+          <textarea
+            id="input-query"
+            readonly
+            placeholder="Highlight code snippet to ask GPT..."
+            class="w-full resize-vertical rounded-md p-2"
+          ></textarea>
+          <div class="user space-y-2">
+            ${userSVG}
+            <div id="clear-input">${trashSVG}</div>
+          </div>
+        </div>
+        <div id="search-output">
+        <div id="search-output-icons">
+          <div class="logo">
+            ${logoSVG}
+          </div>
+          <div id="cancel" class="hidden">
+            ${cancelSVG}
+          </div>
+        </div>
+        <div class="flex-column">
+        <div id="gear-container" class="hidden">
+        <div class="card">
+        <div id="gear">
+        ${loadingSVG}
+      </div>
+        </div>
+        </div>
+        <div class="dialog-box">
+        <div class="card card-indicator" id="card">
+            <textarea id="response-container" class="response-container w-full p-2" readonly class="w-full p-2" placeholder="Hello! Do you have any programming language you would like me to translate?"></textarea>
+        </div>
+        </div>
         </div>
       </div>
-      <div id="search-output">
-      <div id="search-output-icons">
-        <div class="logo">
-          ${logoSVG}
-        </div>
-        <div id="cancel-request" class="hidden">
-          ${cancelSVG}
-        </div>
-      </div>
-      <div class="flex-column">
-      <div id="gear-container" class="hidden">
-      <div class="card">
-      <div id="gear">
-      ${loadingSVG}
-    </div>
-      </div>
-      </div>
-      <div class="dialog-box">
-      <div class="card card-indicator" id="card">
-          <textarea id="response-container" class="response-container w-full p-2" readonly class="w-full p-2" placeholder="Hello! Do you have any programming language you would like me to translate?"></textarea>
-      </div>
-      </div>
-      </div>
-    </div>
-      <script  nonce="${nonce}" src="${jsVSCodeUri}"></script>
-	    </body>
-	</html>`;
+        <script  nonce="${nonce}" src="${jsVSCodeUri}"></script>
+        </body>
+    </html>`;
   }
 }
 
