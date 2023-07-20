@@ -175,25 +175,32 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
             <div id="clear-input">${trashSVG}</div>
           </div>
         </div>
-        <div class="flex" id="search-output">
-          <div id="search-output-icons">
-            <div class="logo">${logoSVG}</div>
-            <div id="cancel" class="hidden">${cancelSVG}</div>
+        <div id="search-output">
+        <div id="search-output-icons">
+          <div class="logo">
+            ${logoSVG}
           </div>
-          <div class="card" readonly>
-            <textarea
-              id="response-container"
-              readonly
-              class="w-full p-2"
-              placeholder="Hello! Do you have any programming language you would like me to translate?"
-            ></textarea>
-            <div id="gear-container" class="hidden">
-              <div id="gear">${loadingSVG}</div>
-            </div>
+          <div id="cancel" class="hidden">
+            ${cancelSVG}
           </div>
         </div>
-        <script nonce="${nonce}" src="${jsVSCodeUri}"></script>
-      </body>
+        <div class="flex-column">
+        <div id="gear-container" class="hidden">
+        <div class="card">
+        <div id="gear">
+        ${loadingSVG}
+      </div>
+        </div>
+        </div>
+        <div class="dialog-box">
+        <div class="card card-indicator" id="card">
+            <textarea id="response-container" class="response-container w-full p-2" readonly class="w-full p-2" placeholder="Hello! Do you have any programming language you would like me to translate?"></textarea>
+        </div>
+        </div>
+        </div>
+      </div>
+        <script  nonce="${nonce}" src="${jsVSCodeUri}"></script>
+        </body>
     </html>`;
   }
 }
