@@ -4,6 +4,7 @@
   --input-padding-horizontal: 4px;
   --input-margin-vertical: 4px;
   --input-margin-horizontal: 0;
+  --svg-color: var(--vscode-editor-foreground);
 }
 
 body {
@@ -74,10 +75,6 @@ input:not([type='checkbox']),
   flex-direction: row;
 }
 
-.logo {
-  margin-right: 10px;
-}
-
 .api-input {
   width: 300px;
   margin-right: 5px;
@@ -103,7 +100,8 @@ input:not([type='checkbox']),
   font-family: var(--vscode-font-family);
   color: #ccc;
   outline-color: var(--vscode-input-border);
-  background-color: #545454;
+  background-color: var(--vscode-input-background);
+  border: 1px solid var(--vscode-input-placeholderForeground);
 }
 
 #input-query {
@@ -135,18 +133,14 @@ input:not([type='checkbox']),
   flex-direction: column;
 }
 
-.trash {
-  cursor: pointer;
-}
-
 .space-y-2 > * + * {
   margin-top: 0.5rem;
 }
 
 svg {
   color: var(--vscode-foreground);
+  fill: var(--vscode-foreground);
 }
-
 .resize-vertical {
   resize: vertical;
   min-height: 50px;
@@ -185,8 +179,8 @@ hr {
 #response-container {
   font-family: var(--vscode-editor-font-family);
   font-size: small;
-  background-color: #545454;
-  color: #ffffff;
+  background-color: var(--vscode-input-background);
+  color: var(--vscode-foreground);
   border: none;
   outline: none;
   resize: none;
@@ -203,10 +197,16 @@ hr {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-right: 10px;
 }
 
-#cancel-request {
-  margin-right: 10px;
+#cancel > svg {
+  margin-top: 5px;
+  stroke: var(--vscode-foreground);
+  cursor: pointer;
+}
+
+#cancel {
   cursor: pointer;
 }
 
@@ -221,4 +221,28 @@ hr {
   width: 100%;
   align-items: center;
   justify-content: center;
+}
+
+.user > svg {
+  stroke: var(--vscode-foreground);
+  fill: none;
+}
+
+#clear-input > svg {
+  stroke: var(--vscode-foreground);
+  fill: none;
+}
+
+#clear-input {
+  cursor: pointer;
+}
+
+#gear > svg {
+  width: 8%;
+  height: 8%;
+}
+
+.logo > svg {
+  stroke: var(--vscode-foreground);
+  fill: none;
 }
