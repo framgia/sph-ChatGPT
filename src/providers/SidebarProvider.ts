@@ -38,27 +38,27 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     webviewView.webview.onDidReceiveMessage(async (data) => {
       switch (data.type) {
         case 'saveApiKey': {
-          const apiKey = {
-            value: data.value,
-            dateAdded: moment(new Date()).format('llll'),
-          };
-          this._view?.webview.postMessage({
-            type: 'onLoadApiKey',
-            value: { ...apiKey, isLoading: true },
-          });
-          this._context.secrets
-            .store('translationApiKey', JSON.stringify(apiKey))
-            .then(() => {
-              this._view?.webview.postMessage({
-                type: 'onLoadApiKey',
-                value: apiKey,
-              });
+          try {
+            await this._context.secrets.store('translationApiKey', data.value);
+            this._openAI = new openai.OpenAIApi(
+              new openai.Configuration({
+                apiKey: data.value,
+              })
+            );
+            const res = await this._openAI.createChatCompletion({
+              model: 'gpt-3.5-turbo',
+              messages: [{ role: 'user', content: data.value }],
             });
-          this._openAI = new openai.OpenAIApi(
-            new openai.Configuration({
-              apiKey: data.value,
-            })
-          );
+            showMessageWithTimeout(
+              'success',
+              'SIM ChatGPT successfully added API key: ' + data.value
+            );
+          } catch (error: any) {
+            showMessageWithTimeout(
+              'error',
+              error.response.data.error.message || error.message
+            );
+          }
           break;
         }
         case 'getApiKey': {
