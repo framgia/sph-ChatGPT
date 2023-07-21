@@ -33,6 +33,7 @@
         textarea.value = message.value;
         textarea.style.height = '';
         textarea.style.height = Math.min(textarea.scrollHeight, 500) + 'px';
+        localStorage.setItem('selectedData', textarea.value);
         break;
       }
       case 'onCommandClicked': {
@@ -103,6 +104,20 @@
     }
   }
 
+  if (localStorage.getItem('selectedData')) {
+    const textarea = document.getElementById('input-query');
+    textarea.value = localStorage.getItem('selectedData');
+    textarea.style.height = '';
+    textarea.style.height = Math.min(textarea.scrollHeight, 500) + 'px';
+  }
+
+  if (localStorage.getItem('selectedArray')) {
+    const textarea = document.getElementById('input-query');
+    textarea.style.height = '';
+    textarea.style.height = Math.min(textarea.scrollHeight, 500) + 'px';
+    displayRecent();
+  }
+
   function getApiInputField(visibility) {
     let form = document.getElementById('myForm');
     let message = document.getElementById('message');
@@ -125,17 +140,6 @@
     textarea.value = '';
     localStorage.setItem('selectedData', textarea.value);
     textarea.style.height = '';
-  };
-
-  const clearConvoInput = document.getElementById('clear-convo');
-  clearConvoInput.onclick = () => {
-    localStorage.removeItem('arrayGptOutput');
-    localStorage.removeItem('selectedArray');
-    localStorage.removeItem('selectedItem');
-    const container = document.querySelector('.dialog-box');
-    container.innerHTML = `<div class="card card-indicator" id="card">
-    <textarea id="response-container"  class="response-container w-full p-2" placeholder="Hello! How can I help you with unit testing today?"></textarea>
-    </div>`;
   };
 
   function handleLoading(isLoading) {
