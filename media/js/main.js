@@ -49,6 +49,7 @@
         break;
       }
       case 'onChatGPTResponse': {
+        localStorage.setItem('isLoading', 'false');
         handleLoading(false);
         const existingArrayString = localStorage.getItem('arrayGptOutput');
         const selectedArrayString = localStorage.getItem('selectedArray');
@@ -60,13 +61,15 @@
           selectedArray = JSON.parse(selectedArrayString);
         }
 
-        existingArray.push(message.value);
-        selectedArray.push(localStorage.getItem('selectedData'));
-        const clearInput = document.getElementById('input-query');
-        clearInput.style.height = '';
-        clearInput.value = '';
-        localStorage.setItem('selectedData', clearInput.value);
-        clearInput.ariaPlaceholder = 'Highlight code snippet to ask GPT...';
+        if (message.value !== 'cancelled') {
+          existingArray.push(message.value);
+          selectedArray.push(localStorage.getItem('selectedData'));
+          const clearInput = document.getElementById('input-query');
+          clearInput.style.height = '';
+          clearInput.value = '';
+          localStorage.setItem('selectedData', clearInput.value);
+          clearInput.ariaPlaceholder = 'Highlight code snippet to ask GPT...';
+        }
 
         const updatedArrayString = JSON.stringify(existingArray);
         const updatedSelectedArrayString = JSON.stringify(selectedArray);
@@ -109,8 +112,21 @@
   clearInput.onclick = () => {
     const textarea = document.getElementById('input-query');
     textarea.value = '';
+    localStorage.setItem('selectedData', textarea.value);
     textarea.style.height = '';
   };
+
+  const clearConvoInput = document.getElementById('clear-convo');
+  clearConvoInput.onclick = () => {
+    localStorage.removeItem('arrayGptOutput');
+    localStorage.removeItem('selectedArray');
+    localStorage.removeItem('selectedItem');
+    const container = document.querySelector('.dialog-box');
+    container.innerHTML = `<div class="card card-indicator" id="card">
+    <textarea id="response-container"  class="response-container w-full p-2" placeholder="Hello! How can I help you with unit testing today?"></textarea>
+    </div>`;
+  };
+
   function handleLoading(isLoading) {
     let searchOutput = document.getElementById('response-container');
     let loading = document.getElementById('gear-container');

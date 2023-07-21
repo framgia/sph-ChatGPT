@@ -224,6 +224,15 @@ hr {
   justify-content: center;
 }
 
+#clear-convo > svg {
+  stroke: var(--vscode-foreground);
+  fill: none;
+}
+
+#clear-convo {
+  cursor: pointer;
+}
+
 #gear > svg {
   width: 10%;
   height: 10%;
