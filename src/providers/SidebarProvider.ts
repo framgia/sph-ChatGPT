@@ -110,9 +110,26 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
                 vscode.commands
                   .executeCommand('sim-chatgpt-translator-sidebar.focus')
                   .then(() => {
+                    const textareaOpen =
+                      "<textarea readonly id='response-container' class='response-container w-full'>";
+                    const textareaClose = '</textarea>';
+                    const regex = new RegExp('```+[a-zA-Z]+([^\\s]*)', 'g');
+                    const newLineRegex = new RegExp('\n\n', 'g');
+                    const closingTextareaRegex = new RegExp('```', 'g');
+                    let replacedTextArea = res.data.choices[0].message?.content;
+                    if (replacedTextArea?.includes('```')) {
+                      replacedTextArea = res.data.choices[0].message?.content
+                        ?.replace(regex, textareaOpen)
+                        .replace(closingTextareaRegex, textareaClose)
+                        .replace(newLineRegex, '');
+                    } else {
+                      replacedTextArea =
+                        textareaOpen + replacedTextArea + textareaClose;
+                    }
+
                     this._view?.webview.postMessage({
                       type: 'onChatGPTResponse',
-                      value: res.data.choices[0].message?.content,
+                      value: replacedTextArea,
                     });
                   });
               }
@@ -125,11 +142,12 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
                   .then(() => {
                     this._view?.webview.postMessage({
                       type: 'onChatGPTResponse',
-                      value: error.response.data.error.message,
+                      value:
+                        error.response?.data?.error?.message || error?.message,
                     });
                     showMessageWithTimeout(
                       'error',
-                      error.response.data.error.message || error.message
+                      error.response?.data?.error?.message || error?.message
                     );
                   });
               }
@@ -183,8 +201,9 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     // Use a nonce to only allow a specific script to be run.
     const nonce = getNonce();
 
-    return `<!DOCTYPE html>
-		<html lang="en">
+    return `
+    <!DOCTYPE html>
+    <html lang="en">
       <head>
         <meta charset="UTF-8" />
         <meta
@@ -220,33 +239,36 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           </div>
         </div>
         <div id="search-output">
-        <div id="search-output-icons">
-          <div class="logo">
-            ${logoSVG}
+          <div id="search-output-icons">
+            <div class="logo">${logoSVG}</div>
+            <div id="clear-convo">${trashSVG}</div>
+            <div id="cancel" class="hidden">${cancelSVG}</div>
           </div>
-          <div id="clear-convo">${trashSVG}</div>
-          <div id="cancel" class="hidden">
-            ${cancelSVG}
+          <div class="flex-column">
+            <div id="gear-container" class="hidden">
+              <div class="card">
+                <div id="gear">${loadingSVG}</div>
+              </div>
+            </div>
+            <div class="dialog-box" id="dialog-box">
+              <div
+                class="card card-indicator card-container"
+                id="card"
+              >
+                <textarea
+                  id="response-container"
+                  class="response-container w-full"
+                  readonly
+                  placeholder="Hello! Do you have any programming language you would like me to translate?"
+                ></textarea>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="flex-column">
-        <div id="gear-container" class="hidden">
-        <div class="card">
-        <div id="gear">
-        ${loadingSVG}
-      </div>
-        </div>
-        </div>
-        <div class="dialog-box">
-        <div class="card card-indicator" id="card">
-            <textarea id="response-container" class="response-container w-full p-2" readonly class="w-full p-2" placeholder="Hello! Do you have any programming language you would like me to translate?"></textarea>
-        </div>
-        </div>
-        </div>
-      </div>
-        <script  nonce="${nonce}" src="${jsVSCodeUri}"></script>
-        </body>
-    </html>`;
+        <script nonce="${nonce}" src="${jsVSCodeUri}"></script>
+      </body>
+    </html>
+    `;
   }
 }
 

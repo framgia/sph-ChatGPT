@@ -39,6 +39,10 @@
       }
       case 'onCommandClicked': {
         localStorage.setItem('isLoading', 'true');
+        const instructionPrompt = `\nStrictly enclose the result of code translation like the code block below:\n
+        \`\`\`suggestion\n
+          // Translated code\n
+        \`\`\``;
         const textarea = document.getElementById('input-query');
         textarea.value = message.value + textarea.value;
         textarea.style.height = '';
@@ -46,7 +50,10 @@
 
         localStorage.setItem('selectedData', textarea.value);
         handleLoading(true);
-        vscode.postMessage({ type: 'queryChatGPT', value: textarea.value });
+        vscode.postMessage({
+          type: 'queryChatGPT',
+          value: textarea.value + instructionPrompt,
+        });
         break;
       }
       case 'onChatGPTResponse': {
@@ -57,7 +64,7 @@
         let existingArray = [];
         let selectedArray = [];
 
-        if (existingArrayString && selectedArray) {
+        if (existingArrayString && selectedArrayString) {
           existingArray = JSON.parse(existingArrayString);
           selectedArray = JSON.parse(selectedArrayString);
         }
@@ -149,14 +156,19 @@
     localStorage.removeItem('arrayGptOutput');
     localStorage.removeItem('selectedArray');
     localStorage.removeItem('selectedItem');
-    const container = document.querySelector('.dialog-box');
-    container.innerHTML = `<div class="card card-indicator" id="card">
-    <textarea id="response-container"  class="response-container w-full p-2" placeholder="Hello! Do you have any programming language you would like me to translate?"></textarea>
-    </div>`;
+    const dialogBox = document.getElementById('dialog-box');
+    dialogBox.querySelectorAll('.card-response').forEach((res) => {
+      res.remove();
+    });
+    dialogBox.querySelectorAll('.card-input').forEach((res) => {
+      res.remove();
+    });
+    const textarea = document.querySelector('.card-indicator');
+    textarea.classList.remove('hidden');
   };
 
   function handleLoading(isLoading) {
-    let searchOutput = document.getElementById('response-container');
+    let searchOutput = document.getElementById('card');
     let loading = document.getElementById('gear-container');
     let cancel = document.getElementById('cancel');
     if (isLoading) {
@@ -182,40 +194,38 @@
       const data = JSON.parse(localStorage.getItem('arrayGptOutput'));
       const selectedData = JSON.parse(localStorage.getItem('selectedArray'));
 
+      container.querySelectorAll('.card-response').forEach((child) => {
+        child.remove();
+      });
+      container.querySelectorAll('.card-input').forEach((child) => {
+        child.remove();
+      });
+
       if (data.length) {
         for (let i = 0; i < data.length; i++) {
-          const existingData = Array.from(
-            container.querySelectorAll('textarea')
-          ).map((textarea) => textarea.value);
-          if (!existingData.includes(data[i])) {
-            const card = document.createElement('div');
-            card.className = 'card border-right';
+          const card = document.createElement('div');
+          card.className = 'card border-right card-response';
+          card.innerHTML = data[i];
+          container.insertBefore(card, container.firstChild);
+          card.querySelectorAll('textarea').forEach((textarea) => {
+            textarea.style.height = '';
+            textarea.style.height = Math.min(textarea.scrollHeight, 500) + 'px';
+          });
 
-            const textareaClone = document.createElement('textarea');
-            textareaClone.value = data[i];
-            textareaClone.readOnly = true;
-            textareaClone.style.height = 'auto';
-            textareaClone.className = 'response-container w-full p-2';
+          const selectedCard = document.createElement('div');
+          selectedCard.className = 'card border-left card-input';
 
-            card.appendChild(textareaClone);
-            container.insertBefore(card, container.firstChild);
-            textareaClone.style.height =
-              Math.min(textareaClone.scrollHeight, 500) + 'px';
+          const selectedClone = document.createElement('textarea');
+          selectedClone.value = selectedData[i];
+          selectedClone.readOnly = true;
+          selectedClone.style.height = 'auto';
+          selectedClone.className =
+            'response-container input-response-container w-full';
 
-            const selectedCard = document.createElement('div');
-            selectedCard.className = 'card border-left';
-
-            const selectedClone = document.createElement('textarea');
-            selectedClone.value = selectedData[i];
-            selectedClone.readOnly = true;
-            selectedClone.style.height = 'auto';
-            selectedClone.className = 'response-container w-full p-2';
-
-            selectedCard.appendChild(selectedClone);
-            container.insertBefore(selectedCard, container.firstChild);
-            selectedClone.style.height =
-              Math.min(selectedClone.scrollHeight, 500) + 'px';
-          }
+          selectedCard.appendChild(selectedClone);
+          container.insertBefore(selectedCard, container.firstChild);
+          selectedClone.style.height =
+            Math.min(selectedClone.scrollHeight, 500) + 'px';
         }
       } else {
         const textarea = document.querySelector('.card-indicator');
