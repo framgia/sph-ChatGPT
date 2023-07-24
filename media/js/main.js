@@ -142,6 +142,17 @@
     textarea.style.height = '';
   };
 
+  const clearConvoInput = document.getElementById('clear-convo');
+  clearConvoInput.onclick = () => {
+    localStorage.removeItem('arrayGptOutput');
+    localStorage.removeItem('selectedArray');
+    localStorage.removeItem('selectedItem');
+    const container = document.querySelector('.dialog-box');
+    container.innerHTML = `<div class="card card-indicator" id="card">
+    <textarea id="response-container"  class="response-container w-full p-2" placeholder="Hello! Do you have any programming language you would like me to translate?"></textarea>
+    </div>`;
+  };
+
   function handleLoading(isLoading) {
     let searchOutput = document.getElementById('response-container');
     let loading = document.getElementById('gear-container');
