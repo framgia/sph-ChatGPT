@@ -38,26 +38,46 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     webviewView.webview.onDidReceiveMessage(async (data) => {
       switch (data.type) {
         case 'saveApiKey': {
+          const apiKey = {
+            value: data.value,
+            dateAdded: moment(new Date()).format('llll'),
+          };
           try {
-            await this._context.secrets.store('translationApiKey', data.value);
+            this._view?.webview.postMessage({
+              type: 'onLoadApiKey',
+              value: { ...apiKey, isLoading: true },
+            });
             this._openAI = new openai.OpenAIApi(
               new openai.Configuration({
                 apiKey: data.value,
               })
             );
-            const res = await this._openAI.createChatCompletion({
+            await this._openAI.createChatCompletion({
               model: 'gpt-3.5-turbo',
               messages: [{ role: 'user', content: data.value }],
+            });
+            await this._context.secrets.store(
+              'translationApiKey',
+              JSON.stringify(apiKey)
+            );
+            this._view?.webview.postMessage({
+              type: 'onLoadApiKey',
+              value: apiKey,
             });
             showMessageWithTimeout(
               'success',
               'SIM ChatGPT successfully added API key: ' + data.value
             );
           } catch (error: any) {
-            showMessageWithTimeout(
-              'error',
-              error.response.data.error.message || error.message
-            );
+            const errorMessage =
+              error.response?.data?.error?.message ||
+              error.message ||
+              'Unknown error occurred';
+            showMessageWithTimeout('error', errorMessage);
+            this._view?.webview.postMessage({
+              type: 'onLoadApiKey',
+              value: undefined,
+            });
           }
           break;
         }
