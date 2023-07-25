@@ -121,7 +121,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
                       replacedTextArea = res.data.choices[0].message?.content
                         ?.replace(regex, textareaOpen)
                         .replace(closingTextareaRegex, textareaClose)
-                        .replace(newLineRegex, '');
+                        .replace(newLineRegex, '\n');
                     } else {
                       replacedTextArea =
                         textareaOpen + replacedTextArea + textareaClose;
