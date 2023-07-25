@@ -1,6 +1,6 @@
-# ⚙️ SIM ChatGPT: Unit Test
+# ⚙️ SIM ChatGPT: Translator
 
-SIM ChatGPT: Unit Test is an internal simulation project of Sun\*. This is a vscode extension developed for the purpose of collaborative and assistive development tool for the software developers. This extension focuses on transalating from code snippets upon highlighting to another language, powered by OpenAI GPT API. It allows them to choose whatever testing framework they prefer as specified and provided by the extension. Try installing `SIM ChatGPT: Translation` now and use it in your development phase with ease!
+SIM ChatGPT: Translator is an internal simulation project of Sun\*. This is a vscode extension developed for the purpose of collaborative and assistive development tool for the software developers. This extension focuses on transalating from code snippets upon highlighting to another language, powered by OpenAI GPT API. It allows them to choose whatever programming language they prefer as specified and provided by the extension. Try installing `SIM ChatGPT: Translation` now and use it in your development phase with ease!
 
 ## 🔗 Link
 
