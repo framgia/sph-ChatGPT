@@ -9,6 +9,7 @@
     'load',
     () => {
       vscode.postMessage({ type: 'getApiKey', value: null });
+      handleLoading(localStorage.getItem('isLoading') === 'true');
     },
     { capture: true }
   );
@@ -37,6 +38,7 @@
         break;
       }
       case 'onCommandClicked': {
+        localStorage.setItem('isLoading', 'true');
         const textarea = document.getElementById('input-query');
         textarea.value = message.value + textarea.value;
         textarea.style.height = '';
