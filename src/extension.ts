@@ -53,7 +53,7 @@ export function activate(context: vscode.ExtensionContext) {
         type: 'onSelectedText',
         value: highlightedText,
       });
-      let query = `Convert this code to ${type}:\n`;
+      let query = `Convert the code below to ${type} and explain:\n`;
       sidebarProvider._view?.webview.postMessage({
         type: 'onCommandClicked',
         value: query,
