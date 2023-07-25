@@ -3,10 +3,15 @@
   "displayName": "SIM ChatGPT: Translator",
   "publisher": "pj-sim-chatgpt-dev",
   "description": "Translate any programming languages based on the selected language provided",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "engines": {
     "vscode": "^1.79.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/framgia/sph-ChatGPT"
+  },
+  "icon": "media/icons/logo.png",
   "categories": [
     "Other"
   ],
