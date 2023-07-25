@@ -1,6 +1,7 @@
 {
   "name": "sim-chatgpt-translator",
   "displayName": "SIM ChatGPT: Translator",
+  "publisher": "pj-sim-chatgpt-dev",
   "description": "Translate any programming languages based on the selected language provided",
   "version": "0.0.1",
   "engines": {
