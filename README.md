@@ -35,6 +35,9 @@ Register an OpenAI API account and create a secret key for it. Copy and paste th
 
 ### 1.0.0
 
-Initial release of SIM ChatGPT: Translations
+Initial release of SIM ChatGPT: Translator
+### 1.0.1
+
+Fix conversation on loading and the extension versioning
 
 **Enjoy!**
